@@ -1,6 +1,6 @@
 from os.path import splitext
 
-from CoreApp.services.image import ImageThumbnailBaseMixin
+from src.CoreApp.services.image import ImageThumbnailBaseMixin
 from django import forms
 from django.core import validators as v
 
@@ -8,6 +8,7 @@ from .models import KvantAward, SocialInfo
 from .services import PDFToImageManager
 
 
+# Обработка подгружаемого диплома
 class KvantAwardPDFToImageManager(PDFToImageManager):
     def clean_image(self):
         if not self.errors:
@@ -23,7 +24,7 @@ class KvantAwardPDFToImageManager(PDFToImageManager):
     def _isValidFile(self, ext):
         return ext == 'pdf' or ext in v.get_available_image_extensions()
 
-
+# Сохранение подгружаемого диплома в модель KvantAward
 class KvantAwardSaveForm(forms.ModelForm, KvantAwardPDFToImageManager):
     class Meta:
         model = KvantAward
@@ -39,14 +40,15 @@ class KvantAwardSaveForm(forms.ModelForm, KvantAwardPDFToImageManager):
         except forms.ValidationError as e:
             self.add_error('image', e)
 
-
 class SocialInfoBannerImageManager(ImageThumbnailBaseMixin):
     def clean_banner(self):
         if self.instance.banner == self.cleaned_data.get('banner'):
             return self.instance.banner
+        #Генерирует миниатюру картинки опираясь на канальность и коэффициент сжатия
         return self.makeImageThumbnail(self.cleaned_data.get('banner'))
 
 
+# Сохранение инф-и о баннере в модель SocialInfo
 class SocialInfoBannerSaveForm(forms.ModelForm, SocialInfoBannerImageManager):
     def __init__(self, *args, **kwargs):
         super(SocialInfoBannerSaveForm, self).__init__(*args, **kwargs)
@@ -57,6 +59,7 @@ class SocialInfoBannerSaveForm(forms.ModelForm, SocialInfoBannerImageManager):
         fields = ['banner', ]
 
 
+# Сохранение инф-и о соц.сетей в модель SocialInfo
 class SocialInfoSaveForm(forms.ModelForm):    
     class Meta:
         model = SocialInfo
