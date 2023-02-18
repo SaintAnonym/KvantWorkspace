@@ -3,13 +3,13 @@ from os.path import splitext
 from sys import getsizeof
 
 import fitz
-from CoreApp.services.access import KvantObjectExistsMixin
-from CoreApp.services.image import ImageThumbnailBaseMixin
-from CoreApp.services.utils import ObjectManipulationManager
+from src.CoreApp.services.access import KvantObjectExistsMixin
+from src.CoreApp.services.image import ImageThumbnailBaseMixin
+from src.CoreApp.services.utils import ObjectManipulationManager
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.urls import reverse_lazy as rl
-from LoginApp.models import KvantUser
-from LoginApp.services import getUserById
+from src.LoginApp.models import KvantUser
+from src.LoginApp.services import getUserById
 from PIL import Image
 
 from .models import KvantAward
@@ -17,11 +17,14 @@ from django.contrib.auth import login
 
 
 def getUserAwardsQuery(user):
-    """ Возвращает все грамоты user """
+    # Возвращает все грамоты user
     return KvantAward.objects.filter(user=user)
 
 
 class UserManipulationManager(ObjectManipulationManager):
+    # JsonResponse - подкласс, HttpResponse, отвечает за отправку клиенту данных в формате JSON
+
+    # Генерирует JsonResponse на ajax запрос
     def updateUserObj(self, request, user):
         obj_or_errors = self._getUpdatedObject(request)
         return self.getResponse(obj_or_errors, user=user)
@@ -29,7 +32,7 @@ class UserManipulationManager(ObjectManipulationManager):
     def _constructRedirectUrl(self, **kwargs):
         return rl('info_page', kwargs={'user_identifier': kwargs.get('user').id})
 
-
+    # Генерирует JsonResponse на ajax запрос изменения пароля
 class UserChangePasswordManager(ObjectManipulationManager):
     def updateObject(self, request):
         user_or_errors = self._getUpdatedObject(request)
@@ -42,7 +45,7 @@ class UserChangePasswordManager(ObjectManipulationManager):
     def _constructRedirectUrl(self, **kwargs):
         return rl('info_page', kwargs={'user_identifier': kwargs.get('obj').id})
 
-
+    # Генерирует JsonResponse на ajax запрос действия с портфоли
 class PortfolioManipulationManager(ObjectManipulationManager):
     def createPortfolioInstance(self, request):
         user_id = request.POST.get('user')
@@ -52,6 +55,8 @@ class PortfolioManipulationManager(ObjectManipulationManager):
         return rl('portfolio_page', kwargs={'user_identifier': kwargs.get('user_id')})
 
 
+# Ковертирование PFD в JPG
+# Используется в forms.py для конвертирование подгружаемых дипломов
 class PDFToImageManager(ImageThumbnailBaseMixin):
     def __init__(self, coef):
         super().__init__(coef)
