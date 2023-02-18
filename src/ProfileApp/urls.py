@@ -1,6 +1,7 @@
 from . import views
 from django.urls import path
 
+# Настройка паттернов ссылок URL диспетчера
 urlpatterns = [
     path('logout', views.LogoutKvantUserView.as_view(), name='logout_user'),
     
