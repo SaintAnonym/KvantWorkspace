@@ -7,6 +7,7 @@ from django.conf import settings
 
 from .models import KvantNews
 
+# Реализует методы для редактирования изображения - урезки превью, изменения каталога изображения и прочее.
 
 class ImageManagerMixin(ImageThumbnailBaseMixin, FileMoveBaseMixin):
     """ Рассширение для реализации урезки превью """
@@ -24,6 +25,10 @@ class ImageManagerMixin(ImageThumbnailBaseMixin, FileMoveBaseMixin):
             )
         return self.makeImageThumbnail(self.cleaned_data.get('image'))  
     
+
+# Используется для сохранения новостей. Она доступна для реализации уменьшения размера изображения 
+# (через миксин класс ImageManagerMixin) и перемещения изображений в отдельный каталог. 
+# Форма одновременно устанавливает несколько ошибок для полей `title` и `image`. 
 
 class KvantNewsSaveForm(forms.ModelForm, ImageManagerMixin):
     class Meta:
@@ -53,6 +58,9 @@ class KvantNewsSaveForm(forms.ModelForm, ImageManagerMixin):
             raise forms.ValidationError('Заголовок не может содержать символ "/".')
         return self.cleaned_data.get('title')
 
+# Использует миксин FileM2MBaseMixin для сохранения файлов для данной новости. 
+# Также добавляет метод для отчистки старых файлов. 
+# Форма предоставляет метод, который определяет путь для сохранения файлов.
 
 class KvantNewsFilesSaveForm(FileM2MBaseMixin):
     class Meta:

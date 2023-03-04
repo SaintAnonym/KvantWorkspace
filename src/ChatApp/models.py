@@ -1,5 +1,7 @@
 from django.db import models
 
+# создает модель "ChatMessage" для Django. 
+# Модель содержит текстовое поле для сообщения и иноего пользователя, посылающего сообщение
 
 class ChatMessage(models.Model):
     message = models.TextField()
