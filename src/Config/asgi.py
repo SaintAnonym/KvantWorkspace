@@ -16,7 +16,7 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 from ChatApp import routing as chat_routing
 from NotificationApp import routing as notification_routing
 
-# Маршрутизация. Задается приложение, передаваемое серверам протоколов
+# Настройка асинхронной стороны приложения. Маршруты для сокетов в router.py
 
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Config.settings')

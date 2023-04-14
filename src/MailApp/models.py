@@ -3,16 +3,21 @@ from django.utils import timezone
 
 
 class MailReceiver(models.Model):
+    # флаг прочитано ли сообщение
     is_read  = models.BooleanField(default=False)
+
+
     receiver = models.ForeignKey(to='LoginApp.KvantUser', on_delete=models.CASCADE, related_name='receivers')
 
     class Meta:
+        # табличка с получателями
         db_table = 'mail_receivers'
 
     def __str__(self):
         return f'Получатель {self.receiver}'
 
 
+# ?абстрактный? класс для создания письма/получения инф-и о нем
 class KvantMessage(models.Model):
 	# TODO: переделать DateField на DateTimeField + добавить спам фильтр
     text        = models.TextField(blank=True)
@@ -31,6 +36,7 @@ class KvantMessage(models.Model):
         return f'Письмо от {self.sender} к {", ".join(receivers)}'
 
 
+# Класс для создания экземпляра избранного письма
 class ImportantMail(models.Model):
     mail = models.ForeignKey(KvantMessage, on_delete=models.CASCADE)
     user = models.ForeignKey(to='LoginApp.KvantUser', on_delete=models.CASCADE)

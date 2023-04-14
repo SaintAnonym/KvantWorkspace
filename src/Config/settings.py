@@ -87,7 +87,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'Config.wsgi.application'
 ASGI_APPLICATION = 'Config.asgi.application'
 
-# Канал
+#  Настройка асинхронной работы приложения (веб сокеты)
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',

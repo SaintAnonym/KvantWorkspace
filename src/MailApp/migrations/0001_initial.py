@@ -8,15 +8,21 @@ import django.utils.timezone
 
 class Migration(migrations.Migration):
 
+    #  Создание миграций БД
+
     initial = True
 
     dependencies = [
         ('CoreApp', '0001_initial'),
+
+        # Создание зависимости
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
+
         migrations.CreateModel(
+            # Создание миграции модели с инф-ой о письмах, его состоянии (прочитано/нет) и получателе
             name='MailReceiver',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -28,6 +34,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
+            # Создание миграции модели с инф-ой о письмах: содержание, тема, дата, заголовок, получатели, отправители
             name='KvantMessage',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -44,6 +51,8 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
+            # Создание миграции модели с инф-ой об ?отмеченных? письмах: ссылка на таблицу KvantMessage с инфой о письме
+            # пользователь, который отметил эти письма
             name='ImportantMail',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
