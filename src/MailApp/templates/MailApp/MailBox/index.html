@@ -149,6 +149,7 @@
                             <strong>{{ mail.title }}</strong>
                             {{ mail.text|get_text }}
                         </p>
+                        <p class="receiver_title">{{ mail.receivers.all.get  }}</p>
                     </div>
                     <p class="mailItem__date">{{ mail.date|date:"j.m.Y" }}</p>
                     
